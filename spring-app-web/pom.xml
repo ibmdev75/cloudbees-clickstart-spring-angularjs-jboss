@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>spring-app</artifactId>
+        <groupId>spring-app</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>spring-app-web</artifactId>
+    <packaging>war</packaging>
+    
+    <pluginRepositories>
+	<pluginRepository>
+		<id>cloudbees-public-release</id>
+		<url>http://repository-cloudbees.forge.cloudbees.com/public-release</url>
+		<releases>
+			<enabled>true</enabled>
+		</releases>
+		<snapshots>
+			<enabled>false</enabled>
+		</snapshots>
+	</pluginRepository>
+</pluginRepositories>
+    
+
+    <dependencies>
+        <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>spring-app-web</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <executions>
+                    <execution>
+                        <id>make-a-jar</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${version.war.plugin}</version>
+                <configuration>
+                    <archiveClasses>true</archiveClasses>
+                </configuration>
+            </plugin>
+            
+            <!-- Plugin failsafe -->
+       		<plugin>
+    		<groupId>org.apache.maven.plugins</groupId>
+    		<artifactId>maven-failsafe-plugin</artifactId>
+    		<version>2.16</version>
+    		<configuration>
+    			<includes>
+      				<include>com/ibm/*.java</include>
+    			</includes>
+  			</configuration>
+    		<dependencies>
+      			<dependency>
+        			<groupId>org.apache.maven.surefire</groupId>
+        			<artifactId>surefire-junit47</artifactId>
+        			<version>2.16</version>
+      			</dependency>
+    		</dependencies>
+    		<executions>
+      			<execution>
+         			<id>integration-test</id>
+         			<goals>
+            			<goal>integration-test</goal>
+         			</goals>
+         		</execution>
+      			<execution>
+         			<id>verify</id>
+         				<goals>
+            				<goal>verify</goal>
+         				</goals>
+      			</execution>
+   			</executions>
+  		</plugin>
+  		
+  		<!-- Plugin Cargo -->
+  		<plugin>
+  			<groupId>org.codehaus.cargo</groupId>
+  			<artifactId>cargo-maven2-plugin</artifactId>
+  			<version>1.4.7</version>
+  			 <configuration>
+
+             <!-- Container où on déploie -->
+             <container>
+             <containerId>${tomcat.type}</containerId>
+             <home>${tomcat.path}</home>
+             </container>
+
+             <!-- Localisation du serveur locale -->
+             <configuration>
+             <type>existing</type>
+             <home>${tomcat.path}</home>
+             </configuration>
+             </configuration>
+  			  
+              <!-- Plan d’éxécution  -->
+              <executions>
+	          <execution>
+		      <id>start-tomcat</id>
+              <phase>pre-integration-test</phase>
+          	  <goals>
+              <goal>start</goal>
+          	  </goals>
+      		  </execution>
+      		  <execution>
+          	  <id>stop-tomcat</id>
+          	  <phase>post-integration-test</phase>
+          	  <goals>
+              <goal>stop</goal>
+              <goal>deployer-undeploy</goal>
+          	  </goals>
+      		  </execution>
+  			</executions>
+  			</plugin>
+  			
+  			<!-- Plugin Cloudbees 
+	  			<plugin>
+					<groupId>com.cloudbees</groupId>
+					<artifactId>bees-maven-plugin</artifactId>
+					<version>1.3.2</version>
+					<configuration>
+						<appid>${cloudbees.appid}</appid>
+						<apikey>${cloudbees.apikey}</apikey>
+						<secret>${cloudbees.secret}</secret>
+					</configuration>
+					<executions>
+						<execution>
+						<id>verify</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>deploy</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			-->
+  			
+  			
+        </plugins>
+    </build>
+</project>
