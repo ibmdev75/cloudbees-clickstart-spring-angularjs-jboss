@@ -10,20 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>spring-app-web</artifactId>
     <packaging>war</packaging>
-    
-    <pluginRepositories>
-	<pluginRepository>
-		<id>cloudbees-public-release</id>
-		<url>http://repository-cloudbees.forge.cloudbees.com/public-release</url>
-		<releases>
-			<enabled>true</enabled>
-		</releases>
-		<snapshots>
-			<enabled>false</enabled>
-		</snapshots>
-	</pluginRepository>
-</pluginRepositories>
-    
+
 
     <dependencies>
         <dependency>
